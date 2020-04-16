@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import * as Yup from 'yup';
 import { Formik, Form, FieldArray, Field, ErrorMessage } from 'formik';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash, faPlus, faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
 
 function DataTable() {
   const blankData = { name: '', quantity: 0, unit_price: 0 };
@@ -27,21 +29,24 @@ function DataTable() {
         <Form>
           <FieldArray name="dataList">
             {(arrayHelper) => (<>
-              <div className="mb-2 float-right">
-                <button className="btn btn-sm btn-outline-secondary mr-1"
-                  disabled={selectedIndex < 1}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    arrayHelper.swap(selectedIndex - 1, selectedIndex);
-                    setSelectedIndex(i => i - 1);
-                  }}>↑</button>
-                <button className="btn btn-sm btn-outline-secondary mr-1"
-                  disabled={selectedIndex < 0 || selectedIndex === formikProps.values.dataList.length - 1}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    arrayHelper.swap(selectedIndex, selectedIndex + 1)
-                    setSelectedIndex(i => i + 1);
-                  }}>↓</button>
+              <div className="d-flex justify-content-between align-items-center mb-2">
+                <h5>Formikでテーブルを編集するサンプル</h5>
+                <div className="btn-group" role="group">
+                  <button className="btn btn-sm btn-outline-secondary"
+                    disabled={selectedIndex < 1}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      arrayHelper.swap(selectedIndex - 1, selectedIndex);
+                      setSelectedIndex(i => i - 1);
+                    }}><FontAwesomeIcon icon={faArrowUp} /></button>
+                  <button className="btn btn-sm btn-outline-secondary"
+                    disabled={selectedIndex < 0 || selectedIndex === formikProps.values.dataList.length - 1}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      arrayHelper.swap(selectedIndex, selectedIndex + 1)
+                      setSelectedIndex(i => i + 1);
+                    }}><FontAwesomeIcon icon={faArrowDown} /></button>
+                </div>
               </div>
               <table className='table table-sm table-bordered'>
                 <thead className='thead-light'>
@@ -68,11 +73,11 @@ function DataTable() {
                           </div>
                         </td>
                         <td className="align-middle">
-                          <Field type="text" className="form-control" name={`dataList[${index}].name`} />
+                          <Field type="text" className="form-control form-control-sm" name={`dataList[${index}].name`} />
                           <ErrorMessage name={`dataList[${index}].name`} />
                         </td>
                         <td className="align-middle">
-                          <Field type="number" className="form-control" name={`dataList[${index}].quantity`} />
+                          <Field type="number" className="form-control form-control-sm" name={`dataList[${index}].quantity`} />
                           <ErrorMessage name={`dataList[${index}].quantity`} />
                         </td>
                         <td className="align-middle text-right">
@@ -82,19 +87,19 @@ function DataTable() {
                           {data.quantity * data.unit_price}
                         </td>
                         <td className="align-middle text-center">
-                          <button className="btn btn-sm btn-outline-secondary mr-1"
+                          <button className="btn btn-sm btn-primary mr-1"
                             onClick={(e) => {
                               e.preventDefault();
                               arrayHelper.insert(index + 1, blankData);
                               setSelectedIndex(index + 1);
-                              }}>＋</button>
+                            }}><FontAwesomeIcon icon={faPlus} /></button>
                           {formikProps.values.dataList.length > 1 && (
-                            <button className="btn btn-sm btn-outline-danger"
+                            <button className="btn btn-sm btn-danger"
                               onClick={(e) => {
                                 e.preventDefault();
                                 arrayHelper.remove(index);
                                 setSelectedIndex(-1);
-                              }}>ー</button>
+                              }}><FontAwesomeIcon icon={faTrash} /></button>
                           )}
                         </td>
                       </tr>
